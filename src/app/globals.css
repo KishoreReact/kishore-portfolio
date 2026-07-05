@@ -1,0 +1,178 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design Tokens ─────────────────────────────────────────────────────────── */
+:root {
+  --color-obsidian: #050505;
+  --color-deep-space: #0A0A1A;
+  --color-cyber-blue: #00F0FF;
+  --color-neon-violet: #8A2BE2;
+  --color-ghost-white: #F0F0F0;
+  --color-mid-gray: #6B7280;
+  --font-main: 'Outfit', system-ui, sans-serif;
+  --font-mono: 'Space Grotesk', monospace;
+}
+
+/* ─── Base Reset ─────────────────────────────────────────────────────────────  */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  background-color: var(--color-obsidian);
+  color: var(--color-ghost-white);
+  font-family: var(--font-main);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Custom Scrollbar ───────────────────────────────────────────────────────  */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-obsidian);
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-cyber-blue), var(--color-neon-violet));
+  border-radius: 99px;
+}
+
+/* ─── Text Selection ─────────────────────────────────────────────────────────  */
+::selection {
+  background: rgba(0, 240, 255, 0.25);
+  color: var(--color-cyber-blue);
+}
+
+/* ─── Glassmorphism Utility ──────────────────────────────────────────────────  */
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .glass-hover {
+    transition: all 0.3s ease;
+  }
+  .glass-hover:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(0, 240, 255, 0.2);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.08), 0 0 0 1px rgba(0, 240, 255, 0.15);
+  }
+
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.3), 0 0 60px rgba(0, 240, 255, 0.1);
+  }
+  .glow-violet {
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.3), 0 0 60px rgba(138, 43, 226, 0.1);
+  }
+  .text-glow-blue {
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+  }
+  .text-glow-violet {
+    text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #00F0FF 0%, #8A2BE2 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gradient-border {
+    position: relative;
+  }
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(0,240,255,0.4), rgba(138,43,226,0.4));
+    border-radius: inherit;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .section-padding {
+    padding: 6rem 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    .section-padding {
+      padding: 8rem 2rem;
+    }
+  }
+
+  .container-max {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Noise texture overlay */
+  .noise-overlay::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    z-index: 9999;
+  }
+}
+
+/* ─── Animation Helpers ──────────────────────────────────────────────────────  */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(0,240,255,0.1), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* ─── Three.js Canvas ────────────────────────────────────────────────────────  */
+canvas {
+  display: block;
+  touch-action: none;
+}
+
+/* The fixed global 3D canvas must never capture pointer events */
+canvas[data-engine] {
+  pointer-events: none !important;
+}
+
+/* Sections use semi-transparent backgrounds so the 3D scene bleeds through */
+.section-3d-overlay {
+  background: linear-gradient(
+    to bottom,
+    rgba(5, 5, 5, 0.72) 0%,
+    rgba(10, 10, 26, 0.80) 100%
+  );
+}
+
+/* Scroll-driven section indicator dots */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}

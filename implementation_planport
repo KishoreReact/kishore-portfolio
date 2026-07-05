@@ -1,0 +1,248 @@
+# Portfolio Rebuild — Next.js 14 + TypeScript + WebGL
+
+## Overview
+
+Migrate Kishore's portfolio from a Vite/React/JSX stack to a **Next.js 14 (App Router) + TypeScript** project with a cinematic design system, WebGL 3D interactivity, and fluid Framer Motion animations. The current neon-green palette will be replaced by a deep obsidian + cyber-blue + neon-violet scheme.
+
+---
+
+## User Review Required
+
+> [!IMPORTANT]
+> The migration creates a **brand-new Next.js project** inside `d:\Development\Portfolio-2024`. The existing Vite files (`vite.config.js`, `index.html`, `src/`) will be removed and replaced. All your projects data, images, and EmailJS credentials will be preserved.
+
+> [!IMPORTANT]
+> **3D Model**: The hero section will use a procedurally-generated animated WebGL sphere/particle cloud by default (no external `.glb` model needed). When you have a ZBrush/Blender export ready (`.glb` with Draco compression), drop it in `public/models/` and set the path in `src/data/config.ts`. This keeps the build working immediately.
+
+> [!WARNING]
+> The project install requires `npm install` to run — this downloads ~200 MB of packages (Next.js, Three.js, Framer Motion, etc.) and may take 3–5 minutes depending on your internet connection.
+
+---
+
+## Open Questions
+
+> [!NOTE]
+> **EmailJS Keys**: Your current keys (`service_gx4ygxm`, `template_chj386o`, `7cChOnv_WL66z7-xo`) will be carried forward into the new Contact section. Let me know if they've changed.
+
+> [!NOTE]
+> **Profile image**: Currently `/images/kishore.anime.jpg` is used. Should I keep this in the hero section, or use the 3D canvas as the sole focal point?
+
+> [!NOTE]
+> **Routing preference**: The current site has separate pages (`/about-me`, `/projects`, `/technologies`). Do you want to keep multi-page routing, or switch to a **single-page scroll** experience (all sections on one page)?
+
+---
+
+## Proposed Changes
+
+### Phase 1 — Project Bootstrap
+
+#### [NEW] `next.config.ts`
+Next.js config enabling Webpack 5, GLSL support for shaders, and transpiling Three.js.
+
+#### [NEW] `tailwind.config.ts`
+Full cinematic design system:
+```
+obsidian:     #050505
+cyber-blue:   #00F0FF
+neon-violet:  #8A2BE2
+ghost-white:  #F0F0F0
+```
+Custom animations: `float`, `pulse-glow`, `gradient-shift`.
+
+#### [NEW] `tsconfig.json`
+Strict TypeScript with `@/*` path alias.
+
+---
+
+### Phase 2 — App Shell
+
+#### [NEW] `src/app/layout.tsx`
+Root layout with:
+- Google Fonts (Outfit + Space Grotesk)
+- Global CSS variables
+- `<CustomCursor />` overlay
+- Smooth scroll behavior
+
+#### [NEW] `src/app/page.tsx`
+Single-page composition of all section components.
+
+#### [NEW] `src/app/globals.css`
+CSS custom properties, scrollbar styling, selection highlight, glass morphism utility classes.
+
+---
+
+### Phase 3 — Core UI Components
+
+#### [NEW] `src/components/ui/CustomCursor.tsx`
+Magnetic custom cursor that morphs on hover over interactive elements.
+
+#### [NEW] `src/components/ui/Navbar.tsx`
+Glassmorphism floating navbar with scroll-progress indicator and magnetic nav links.
+
+#### [NEW] `src/components/ui/SectionHeading.tsx`
+Reusable animated section title with glowing underline.
+
+---
+
+### Phase 4 — Hero Section (WebGL)
+
+#### [NEW] `src/components/sections/Hero.tsx`
+Full-screen hero featuring:
+- `<Canvas>` from `@react-three/fiber`
+- `<HeroScene />` — animated icosphere with dynamic shader material reacting to mouse coordinates
+- `<Environment>` preset + `<EffectComposer>` for bloom + chromatic aberration (via `@react-spring/postprocessing`)
+- `<OrbitControls>` with damping tied to mouse delta
+- Floating glassmorphism stat cards (`Experience`, `Projects`, `Skills`) with 3D perspective tilt on hover
+- Framer Motion staggered text reveal for name + tagline
+- Scroll indicator arrow with bounce animation
+
+#### [NEW] `src/components/three/HeroScene.tsx`
+Three.js scene graph:
+- `IcosphereModel` — custom geometry with displacement shader driven by `useFrame` clock
+- `SpotLight` casting real-time shadows
+- `PointLight` in cyber-blue + neon-violet
+- Draco-ready `useGLTF` hook (falls back to procedural mesh if no `.glb` path configured)
+
+#### [NEW] `src/components/three/ParticleField.tsx`
+10,000-point particle system using `BufferGeometry` and a custom vertex shader — particles drift and respond to mouse proximity.
+
+---
+
+### Phase 5 — About Section
+
+#### [NEW] `src/components/sections/About.tsx`
+Bento-box grid layout (CSS Grid, 3 columns × 2 rows):
+- **Card 1** (2×1): Bio text with staggered word reveal
+- **Card 2** (1×1): Animated skill pills
+- **Card 3** (1×1): Experience counter with odometer animation
+- **Card 4** (1×1): Location card with CSS globe animation
+- **Card 5** (1×1): "Currently building" live status badge
+Each card: hover → `translateY(-8px)` + `rotateX/Y` perspective shift + glowing gradient border reveal via CSS `::before` pseudo-element animation.
+
+---
+
+### Phase 6 — Projects Section
+
+#### [NEW] `src/components/sections/Projects.tsx`
+3D card carousel using `@react-three/drei`'s `<Carousel>` primitive:
+- Cylindrical carousel with project cards rendered on 3D planes
+- Each card shows project thumbnail with `WebGL texture`
+- Click → Framer Motion `layoutId` shared-layout transition to full-screen detail overlay
+- Detail overlay: project description, tech stack pills, live/repo links
+
+#### [NEW] `src/components/sections/ProjectDetail.tsx`
+Shared-layout animated detail panel (Framer Motion `AnimatePresence` + `layoutId`).
+
+---
+
+### Phase 7 — Skills / Technologies Section
+
+#### [NEW] `src/components/sections/Skills.tsx`
+Animated skill orbs in a radial WebGL canvas. Orbs orbit a central point; hovering reveals skill name + proficiency bar. Tech icons from `react-icons`.
+
+---
+
+### Phase 8 — Contact Section
+
+#### [NEW] `src/components/sections/Contact.tsx`
+Floating glassmorphism form:
+- Input fields: border animates from gray → cyber-blue glow on focus (CSS + Framer Motion)
+- Label floats upward on input (micro-interaction)
+- Submit → loading spinner → success: 3D check-mark particle burst animation
+- EmailJS integration (carrying over your existing keys)
+
+---
+
+### Phase 9 — Footer
+
+#### [NEW] `src/components/ui/Footer.tsx`
+Minimal footer with social links, copyright, and subtle gradient line.
+
+---
+
+### Phase 10 — Data Layer
+
+#### [MODIFY] `src/data/projects.ts` (from `src/utils/constants.js`)
+TypeScript-typed project array carrying all 7 existing projects.
+
+#### [NEW] `src/data/config.ts`
+Central config: personal info, social links, EmailJS keys, 3D model path.
+
+---
+
+## Tech Stack Summary
+
+| Package | Version | Purpose |
+|---|---|---|
+| `next` | 14.x | Framework |
+| `typescript` | 5.x | Type safety |
+| `tailwindcss` | 3.x | Utility CSS |
+| `framer-motion` | 11.x | Animations |
+| `@react-three/fiber` | 8.x | React/Three.js bridge |
+| `@react-three/drei` | 9.x | Three.js helpers |
+| `@react-three/postprocessing` | 2.x | Bloom, chromatic aberration |
+| `three` | 0.165.x | 3D engine |
+| `leva` | 0.9.x | Debug controls (dev only) |
+| `@emailjs/browser` | 4.x | Contact form |
+| `react-icons` | 5.x | Icon library |
+| `clsx` | 2.x | Conditional classNames |
+
+---
+
+## File Tree (New Structure)
+
+```
+d:\Development\Portfolio-2024\
+├── public/
+│   ├── images/               ← existing images preserved
+│   └── models/               ← drop .glb files here
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   └── globals.css
+│   ├── components/
+│   │   ├── ui/
+│   │   │   ├── Navbar.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   ├── CustomCursor.tsx
+│   │   │   └── SectionHeading.tsx
+│   │   ├── sections/
+│   │   │   ├── Hero.tsx
+│   │   │   ├── About.tsx
+│   │   │   ├── Projects.tsx
+│   │   │   ├── ProjectDetail.tsx
+│   │   │   ├── Skills.tsx
+│   │   │   └── Contact.tsx
+│   │   └── three/
+│   │       ├── HeroScene.tsx
+│   │       └── ParticleField.tsx
+│   ├── data/
+│   │   ├── projects.ts
+│   │   └── config.ts
+│   ├── hooks/
+│   │   ├── useMousePosition.ts
+│   │   └── useScrollProgress.ts
+│   └── lib/
+│       └── utils.ts
+├── next.config.ts
+├── tailwind.config.ts
+├── tsconfig.json
+└── package.json
+```
+
+---
+
+## Verification Plan
+
+### Automated
+- `npm run build` — TypeScript compilation + Next.js build with no errors
+- `npm run lint` — ESLint passes
+
+### Manual Verification
+1. Dev server starts (`npm run dev`) — opens at `localhost:3000`
+2. Hero 3D canvas renders and responds to mouse movement
+3. Framer Motion page transitions are smooth
+4. Contact form submits via EmailJS
+5. All 7 projects appear in the carousel
+6. Responsive layout works on mobile (375px) and desktop (1440px)
