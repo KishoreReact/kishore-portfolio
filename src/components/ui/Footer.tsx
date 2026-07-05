@@ -3,11 +3,12 @@
 import { motion } from "framer-motion";
 import { FiGithub, FiLinkedin, FiTwitter, FiMail } from "react-icons/fi";
 import { siteConfig } from "@/data/config";
+import { CiInstagram } from "react-icons/ci";
 
 const socialLinks = [
   { icon: FiGithub, href: siteConfig.social.github, label: "GitHub" },
   { icon: FiLinkedin, href: siteConfig.social.linkedin, label: "LinkedIn" },
-  { icon: FiTwitter, href: siteConfig.social.twitter, label: "Twitter" },
+  { icon: CiInstagram, href: siteConfig.social.instagram, label: "Instagram" },
   { icon: FiMail, href: `mailto:${siteConfig.email}`, label: "Email" },
 ];
 
