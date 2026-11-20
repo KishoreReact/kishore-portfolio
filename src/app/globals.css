@@ -11,7 +11,7 @@
   --color-ghost-white: #F0F0F0;
   --color-mid-gray: #6B7280;
   --font-main: 'Outfit', system-ui, sans-serif;
-  --font-mono: 'Space Grotesk', monospace;
+  --font-mono: 'JetBrains Mono', 'Space Grotesk', monospace;
 }
 
 /* ─── Base Reset ─────────────────────────────────────────────────────────────  */

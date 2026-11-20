@@ -1,28 +1,91 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { FiArrowDown, FiGithub, FiLinkedin } from "react-icons/fi";
+import { FiArrowDown, FiLinkedin, FiDownload } from "react-icons/fi";
 import { useMousePosition } from "@/hooks/useMousePosition";
 import { siteConfig } from "@/data/config";
 import { BsInstagram } from "react-icons/bs";
 
-// ── Glassmorphism stat card ──────────────────────────────────────────────────
+// ── Typewriter / rotating-word effect ──────────────────────────────────────
+const rotatingWords = [
+  "AI Agents",
+  "RAG Systems",
+  "Scalable Web Apps",
+  "Real-time Platforms",
+];
+
+function RotatingTypewriter() {
+  const [wordIndex, setWordIndex] = useState(0);
+  const [displayed, setDisplayed] = useState("");
+  const [phase, setPhase] = useState<"typing" | "pause" | "erasing">("typing");
+
+  useEffect(() => {
+    const word = rotatingWords[wordIndex];
+    let timeout: ReturnType<typeof setTimeout>;
+
+    if (phase === "typing") {
+      if (displayed.length < word.length) {
+        timeout = setTimeout(() => setDisplayed(word.slice(0, displayed.length + 1)), 60);
+      } else {
+        timeout = setTimeout(() => setPhase("pause"), 1800);
+      }
+    } else if (phase === "pause") {
+      timeout = setTimeout(() => setPhase("erasing"), 400);
+    } else {
+      if (displayed.length > 0) {
+        timeout = setTimeout(() => setDisplayed(displayed.slice(0, -1)), 35);
+      } else {
+        setWordIndex((i) => (i + 1) % rotatingWords.length);
+        setPhase("typing");
+      }
+    }
+    return () => clearTimeout(timeout);
+  }, [displayed, phase, wordIndex]);
+
+  return (
+    <span className="inline-block min-w-[2ch]">
+      <span className="gradient-text font-bold">{displayed}</span>
+      <span className="animate-pulse text-cyber-blue">|</span>
+    </span>
+  );
+}
+
+// ── Real stat card with count-up ────────────────────────────────────────────
 function StatCard({
   value,
+  suffix,
   label,
   mouseX,
   mouseY,
   delay = 0,
 }: {
-  value: string;
+  value: number;
+  suffix?: string;
   label: string;
   mouseX: number;
   mouseY: number;
   delay?: number;
 }) {
+  const [count, setCount] = useState(0);
+  const hasRun = useRef(false);
   const rotateX = mouseY * -8;
   const rotateY = mouseX * 8;
+
+  useEffect(() => {
+    if (hasRun.current) return;
+    hasRun.current = true;
+    const duration = 1200;
+    const steps = 40;
+    const increment = value / steps;
+    let current = 0;
+    const timer = setInterval(() => {
+      current = Math.min(current + increment, value);
+      setCount(Math.round(current));
+      if (current >= value) clearInterval(timer);
+    }, duration / steps);
+    return () => clearInterval(timer);
+  }, [value]);
 
   return (
     <motion.div
@@ -35,7 +98,9 @@ function StatCard({
       }}
       className="glass gradient-border rounded-2xl px-6 py-4 text-center min-w-[90px] float"
     >
-      <div className="text-2xl font-bold gradient-text">{value}</div>
+      <div className="text-2xl font-bold gradient-text">
+        {count}{suffix}
+      </div>
       <div className="text-xs text-ghost-white/40 mt-1 font-medium tracking-wide">{label}</div>
     </motion.div>
   );
@@ -73,6 +138,13 @@ export default function Hero() {
     document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const stats = [
+    { value: siteConfig.yearsExperience, suffix: "+", label: "Years Exp." },
+    { value: siteConfig.projectsCompleted, suffix: "+", label: "Projects" },
+    { value: siteConfig.aiPlatforms, suffix: "", label: "AI Platforms" },
+    { value: siteConfig.technologiesCount, suffix: "+", label: "Technologies" },
+  ];
+
   return (
     <section
       id="home"
@@ -83,7 +155,6 @@ export default function Hero() {
       <div className="absolute inset-0 bg-dark-gradient" />
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-violet/8 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyber-blue/8 rounded-full blur-[120px] pointer-events-none" />
-
 
       {/* ── Content ──────────────────────────────────────────────────────── */}
       <motion.div
@@ -128,7 +199,7 @@ export default function Hero() {
             {siteConfig.title}
           </motion.div>
 
-          {/* Bio */}
+          {/* Typewriter tagline */}
           <motion.p
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
@@ -137,6 +208,16 @@ export default function Hero() {
           >
             {siteConfig.tagline}
           </motion.p>
+
+          {/* Rotating keywords */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.95, duration: 0.5 }}
+            className="text-sm text-ghost-white/40 font-mono"
+          >
+            <RotatingTypewriter />
+          </motion.div>
 
           {/* CTA Buttons */}
           <motion.div
@@ -154,17 +235,16 @@ export default function Hero() {
             >
               View My Work
             </motion.button>
-            {/* <motion.a
-              href={siteConfig.social.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              id="hero-cta-github"
+            <motion.a
+              href={siteConfig.resumeUrl}
+              download
+              id="hero-cta-resume"
               className="px-7 py-3 font-semibold text-ghost-white rounded-xl glass gradient-border text-sm flex items-center gap-2"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.96 }}
             >
-              <FiGithub size={16} /> GitHub
-            </motion.a> */}
+              <FiDownload size={16} /> Resume
+            </motion.a>
             <motion.a
               href={siteConfig.social.linkedin}
               target="_blank"
@@ -174,7 +254,7 @@ export default function Hero() {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.96 }}
             >
-              <FiLinkedin size={16} /> Linkedin
+              <FiLinkedin size={16} /> LinkedIn
             </motion.a>
           </motion.div>
 
@@ -201,28 +281,18 @@ export default function Hero() {
         </div>
 
         {/* Right: Stat cards */}
-        <div className="hidden lg:flex flex-col items-end gap-4">
-          <StatCard
-            value={`${siteConfig.yearsExperience}+`}
-            label="Years Exp."
-            mouseX={normalizedX}
-            mouseY={normalizedY}
-            delay={0}
-          />
-          <StatCard
-            value={`${siteConfig.projectsCompleted}+`}
-            label="Projects"
-            mouseX={normalizedX}
-            mouseY={normalizedY}
-            delay={0.1}
-          />
-          <StatCard
-            value="∞"
-            label="Passion"
-            mouseX={normalizedX}
-            mouseY={normalizedY}
-            delay={0.2}
-          />
+        <div className="hidden lg:grid grid-cols-2 gap-4 items-start">
+          {stats.map((s, i) => (
+            <StatCard
+              key={s.label}
+              value={s.value}
+              suffix={s.suffix}
+              label={s.label}
+              mouseX={normalizedX}
+              mouseY={normalizedY}
+              delay={i * 0.1}
+            />
+          ))}
         </div>
       </motion.div>
 

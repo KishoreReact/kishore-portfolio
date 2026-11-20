@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { siteConfig } from "@/data/config";
+import { FiBriefcase } from "react-icons/fi";
 
 const navLinks = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
+  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
   { label: "Skills", href: "#skills" },
   { label: "Contact", href: "#contact" },
@@ -106,15 +108,27 @@ export default function Navbar() {
             })}
           </ul>
 
-          {/* Hire me CTA */}
-          <motion.button
-            onClick={() => scrollTo("#contact")}
-            className="hidden md:flex items-center gap-2 px-5 py-2 text-sm font-semibold text-obsidian rounded-lg bg-gradient-to-r from-cyber-blue to-neon-violet glow-blue"
-            whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(0,240,255,0.4)" }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Hire Me
-          </motion.button>
+          {/* Right: Hire Me + Book a Call */}
+          <div className="hidden md:flex items-center gap-2">
+            <motion.a
+              href={siteConfig.bookingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-ghost-white/60 rounded-lg glass border border-border-glass hover:border-ghost-white/20 hover:text-ghost-white transition-all"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <FiBriefcase size={13} /> Book a Call
+            </motion.a>
+            <motion.button
+              onClick={() => scrollTo("#contact")}
+              className="flex items-center gap-2 px-5 py-2 text-sm font-semibold text-obsidian rounded-lg bg-gradient-to-r from-cyber-blue to-neon-violet glow-blue"
+              whileHover={{ scale: 1.05, boxShadow: "0 0 30px rgba(0,240,255,0.4)" }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Hire Me
+            </motion.button>
+          </div>
 
           {/* Mobile hamburger */}
           <button
@@ -168,12 +182,23 @@ export default function Navbar() {
               <motion.button
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.35 }}
+                transition={{ delay: 0.4 }}
                 onClick={() => scrollTo("#contact")}
                 className="w-full mt-6 px-5 py-3 font-semibold text-obsidian rounded-lg bg-gradient-to-r from-cyber-blue to-neon-violet"
               >
                 Hire Me
               </motion.button>
+              <motion.a
+                href={siteConfig.bookingUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.46 }}
+                className="w-full mt-2 px-5 py-3 font-medium text-ghost-white/70 rounded-lg glass border border-border-glass flex items-center justify-center gap-2 text-sm"
+              >
+                <FiBriefcase size={14} /> Book a Call
+              </motion.a>
             </div>
           </motion.div>
         )}

@@ -1,0 +1,37 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#050505"/>
+      <stop offset="100%" style="stop-color:#0A0A1A"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00F0FF"/>
+      <stop offset="100%" style="stop-color:#8A2BE2"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <!-- Grid lines -->
+  <line x1="0" y1="315" x2="1200" y2="315" stroke="#00F0FF" stroke-opacity="0.05" stroke-width="1"/>
+  <line x1="600" y1="0" x2="600" y2="630" stroke="#00F0FF" stroke-opacity="0.05" stroke-width="1"/>
+  <!-- Glow circles -->
+  <circle cx="300" cy="315" r="200" fill="#00F0FF" fill-opacity="0.03"/>
+  <circle cx="900" cy="315" r="200" fill="#8A2BE2" fill-opacity="0.03"/>
+  <!-- Badge -->
+  <rect x="470" y="200" width="260" height="32" rx="16" fill="none" stroke="url(#accent)" stroke-width="1" stroke-opacity="0.4"/>
+  <text x="600" y="221" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#00F0FF" letter-spacing="3" font-weight="600">FEATURED AI PROJECT</text>
+  <!-- Title -->
+  <text x="600" y="295" text-anchor="middle" font-family="system-ui,sans-serif" font-size="42" fill="white" font-weight="700">GlobalReach</text>
+  <!-- Gradient underline -->
+  <rect x="460" y="310" width="280" height="3" rx="2" fill="url(#accent)"/>
+  <!-- Subtitle -->
+  <text x="600" y="360" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" fill="#F0F0F0" fill-opacity="0.5">B2B Lead Discovery &amp; Outreach CRM</text>
+  <!-- Tech stack -->
+  <text x="600" y="420" text-anchor="middle" font-family="monospace" font-size="13" fill="#00F0FF" fill-opacity="0.6">Next.js 14 · FastAPI · PostgreSQL · PostGIS · Redis · Elasticsearch · Docker</text>
+  <!-- URL -->
+  <text x="600" y="470" text-anchor="middle" font-family="monospace" font-size="12" fill="#F0F0F0" fill-opacity="0.3">getyourclientsb2b.com</text>
+  <!-- Corner dots -->
+  <circle cx="50" cy="50" r="4" fill="#00F0FF" fill-opacity="0.3"/>
+  <circle cx="1150" cy="50" r="4" fill="#8A2BE2" fill-opacity="0.3"/>
+  <circle cx="50" cy="580" r="4" fill="#8A2BE2" fill-opacity="0.3"/>
+  <circle cx="1150" cy="580" r="4" fill="#00F0FF" fill-opacity="0.3"/>
+</svg>

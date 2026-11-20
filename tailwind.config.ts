@@ -19,7 +19,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-outfit)", "system-ui", "sans-serif"],
-        mono: ["var(--font-space-grotesk)", "monospace"],
+        mono: ["var(--font-jetbrains-mono)", "var(--font-space-grotesk)", "monospace"],
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

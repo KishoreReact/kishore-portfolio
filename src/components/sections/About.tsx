@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { FiMapPin, FiCode, FiZap, FiStar } from "react-icons/fi";
-import { SiReact, SiNodedotjs, SiTypescript, SiNextdotjs } from "react-icons/si";
+import { FiMapPin, FiCode, FiZap, FiStar, FiCpu } from "react-icons/fi";
+import { SiReact, SiNodedotjs, SiTypescript, SiNextdotjs, SiPython, SiFastapi } from "react-icons/si";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { siteConfig } from "@/data/config";
 
@@ -55,21 +55,80 @@ function BentoCard({ children, className = "", delay = 0, colSpan = "1" }: Bento
   );
 }
 
-function CounterBadge({ value, label }: { value: string; label: string }) {
+// ── Count-up hook ────────────────────────────────────────────────────────────
+function useCountUp(target: number, inView: boolean) {
+  const [count, setCount] = useState(0);
+  const hasRun = useRef(false);
+
+  useEffect(() => {
+    if (!inView || hasRun.current) return;
+    hasRun.current = true;
+    const duration = 1400;
+    const steps = 50;
+    const inc = target / steps;
+    let cur = 0;
+    const timer = setInterval(() => {
+      cur = Math.min(cur + inc, target);
+      setCount(Math.round(cur));
+      if (cur >= target) clearInterval(timer);
+    }, duration / steps);
+    return () => clearInterval(timer);
+  }, [inView, target]);
+
+  return count;
+}
+
+function AnimatedStat({
+  value,
+  suffix,
+  label,
+  inView,
+}: {
+  value: number;
+  suffix: string;
+  label: string;
+  inView: boolean;
+}) {
+  const count = useCountUp(value, inView);
   return (
     <div className="text-center">
-      <div className="text-4xl font-bold gradient-text">{value}</div>
+      <div className="text-4xl font-bold gradient-text">
+        {count}{suffix}
+      </div>
       <div className="text-xs text-ghost-white/40 mt-1 tracking-wide">{label}</div>
     </div>
   );
 }
 
 export default function About() {
+  const statsRef = useRef<HTMLDivElement>(null);
+  const [statsInView, setStatsInView] = useState(false);
+
+  useEffect(() => {
+    const el = statsRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setStatsInView(true); },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   const techStack = [
-    { icon: SiReact, name: "React", color: "#61DAFB" },
-    { icon: SiNextdotjs, name: "Next.js", color: "#ffffff" },
+    { icon: SiReact, name: "React.js", color: "#61DAFB" },
+    { icon: SiNextdotjs, name: "Next.js 14", color: "#ffffff" },
+    { icon: SiPython, name: "Python", color: "#3776AB" },
+    { icon: SiFastapi, name: "FastAPI", color: "#009688" },
     { icon: SiNodedotjs, name: "Node.js", color: "#68A063" },
     { icon: SiTypescript, name: "TypeScript", color: "#3178C6" },
+  ];
+
+  const stats = [
+    { value: siteConfig.yearsExperience, suffix: "+", label: "Years Exp." },
+    { value: siteConfig.projectsCompleted, suffix: "+", label: "Projects Shipped" },
+    { value: siteConfig.aiPlatforms, suffix: "", label: "AI Platforms" },
+    { value: siteConfig.technologiesCount, suffix: "+", label: "Technologies" },
   ];
 
   return (
@@ -82,7 +141,7 @@ export default function About() {
           label="Who I Am"
           title="About"
           highlight="Me"
-          description="A passionate developer who transforms ideas into beautiful, performant digital experiences."
+          description="Frontend-first engineer turned AI builder. 5+ years shipping scalable products that work beautifully at any scale."
         />
 
         {/* Bento grid */}
@@ -98,14 +157,14 @@ export default function About() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-ghost-white">My Story</h3>
-                    <p className="text-xs text-ghost-white/30">Full Stack Developer</p>
+                    <p className="text-xs text-ghost-white/30">AI Full Stack Developer</p>
                   </div>
                 </div>
                 <p className="text-ghost-white/60 text-sm leading-relaxed">
                   {siteConfig.bio}
                 </p>
                 <p className="text-ghost-white/50 text-sm leading-relaxed mt-3">
-                  Thanks to my creativity, attention to detail, and determination, I realized I have a great talent for developing web applications. Fascinated by the ever-evolving world of technologies, I&apos;m building incredible projects—professionally and personally.
+                  {siteConfig.bioLine2}
                 </p>
               </div>
               <div className="w-40 h-40 md:w-44 md:h-44 relative rounded-2xl overflow-hidden border border-cyber-blue/20 flex-shrink-0 group/img">
@@ -133,7 +192,6 @@ export default function About() {
                   <h3 className="font-semibold text-ghost-white text-sm">Location</h3>
                 </div>
 
-                {/* Interactive Embed Map View */}
                 <div className="relative w-full h-32 rounded-xl overflow-hidden glass border border-border-glass isolation-isolate">
                   <iframe
                     title="Google Map Location"
@@ -142,7 +200,6 @@ export default function About() {
                     allowFullScreen
                     loading="lazy"
                   />
-                  {/* Animated map pulse overlaying the center */}
                   <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
                     <span className="absolute w-6 h-6 rounded-full bg-cyber-blue/30 animate-ping" />
                     <span className="relative w-3 h-3 rounded-full bg-cyber-blue glow-blue" />
@@ -161,17 +218,16 @@ export default function About() {
             </a>
           </BentoCard>
 
-          {/* Card 3 — Stats */}
+          {/* Card 3 — Animated Stats */}
           <BentoCard delay={0.15}>
-            <div className="flex items-center gap-2 mb-5">
+            <div ref={statsRef} className="flex items-center gap-2 mb-5">
               <FiStar className="text-cyber-blue" size={18} />
               <h3 className="font-semibold text-ghost-white text-sm">By The Numbers</h3>
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <CounterBadge value={`${siteConfig.yearsExperience}+`} label="Years Exp." />
-              <CounterBadge value={`${siteConfig.projectsCompleted}+`} label="Projects" />
-              <CounterBadge value="10+" label="Technologies" />
-              <CounterBadge value="100%" label="Dedication" />
+              {stats.map((s) => (
+                <AnimatedStat key={s.label} value={s.value} suffix={s.suffix} label={s.label} inView={statsInView} />
+              ))}
             </div>
           </BentoCard>
 
@@ -181,24 +237,27 @@ export default function About() {
               <FiZap className="text-neon-violet" size={18} />
               <h3 className="font-semibold text-ghost-white text-sm">Core Stack</h3>
             </div>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2">
               {techStack.map(({ icon: Icon, name, color }) => (
                 <motion.div
                   key={name}
                   className="flex items-center gap-2 px-3 py-2.5 glass rounded-xl border border-border-glass hover:border-cyber-blue/20 transition-all cursor-default"
                   whileHover={{ scale: 1.04 }}
                 >
-                  <Icon size={16} color={color} />
+                  <Icon size={15} color={color} />
                   <span className="text-xs font-medium text-ghost-white/70">{name}</span>
                 </motion.div>
               ))}
             </div>
           </BentoCard>
 
-          {/* Card 5 — Status */}
+          {/* Card 5 — Currently Building */}
           <BentoCard delay={0.25} colSpan="1">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="font-semibold text-ghost-white text-sm">Currently Building</h3>
+              <div className="flex items-center gap-2">
+                <FiCpu className="text-green-400" size={16} />
+                <h3 className="font-semibold text-ghost-white text-sm">Currently Building</h3>
+              </div>
               <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-green-500/10 text-green-400 border border-green-500/20">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                 Active
@@ -206,12 +265,12 @@ export default function About() {
             </div>
             <div className="space-y-3">
               <div className="glass border border-border-glass rounded-xl p-3">
-                <p className="text-xs text-ghost-white/60 font-medium">AI agents and workflow</p>
-                <p className="text-[11px] text-ghost-white/30 mt-0.5">Python + Next.js</p>
+                <p className="text-xs text-ghost-white/60 font-medium">AI Agents & Workflow Automation</p>
+                <p className="text-[11px] text-ghost-white/30 mt-0.5">Python + LangChain + Next.js</p>
               </div>
               <div className="glass border border-border-glass rounded-xl p-3">
-                <p className="text-xs text-ghost-white/60 font-medium">AI-Powered Apps</p>
-                <p className="text-[11px] text-ghost-white/30 mt-0.5">Python + React</p>
+                <p className="text-xs text-ghost-white/60 font-medium">RAG-powered Knowledge Bases</p>
+                <p className="text-[11px] text-ghost-white/30 mt-0.5">FastAPI + Vector DB + Claude API</p>
               </div>
             </div>
           </BentoCard>

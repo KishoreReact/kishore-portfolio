@@ -1,74 +1,62 @@
 export interface Project {
   id: number;
   title: string;
+  shortDescription: string;
   description: string;
-  technologies: string | string[];
+  technologies: string[];
   src: string;
   images: string[];
   demo: string;
-  code: string;
+  code?: string;         // only set when repo belongs to KishoreReact
+  githubOwned: boolean;  // controls whether GH button renders
+  featured: boolean;     // AI projects go first
+  outcome?: string;      // one-line impact
   tags?: string[];
 }
 
 const projects: Project[] = [
+  // ── FEATURED AI Projects ───────────────────────────────────────────────────
   {
-    id: 1,
-    title: "iLearning",
+    id: 10,
+    title: "GlobalReach — B2B Lead Discovery & Outreach CRM",
+    shortDescription:
+      "Enterprise-grade B2B client acquisition platform for lead prospecting and sales pipeline tracking.",
     description:
-      "Dynamic platform designed to enhance educational experiences through interactive and engaging content delivery.",
-    technologies: "Javascript, React, Nodejs, PostgreSQL, HTML5, CSS",
-    src: "/images/projectsImages/ile1.png",
-    images: [
-      "/images/projectsImages/ilelogin.png",
-      "/images/projectsImages/ile1.png",
-      "/images/projectsImages/ile2.png",
-      "/images/projectsImages/ile3.png",
-    ],
-    demo: "https://aaisolutions.ai/",
-    code: "https://github.com/KishoreReact",
-    tags: ["React", "Node.js", "PostgreSQL"],
+      "Full-stack enterprise platform built for B2B lead discovery and sales pipeline management. Features geo-aware lead search with PostGIS, full-text search via Elasticsearch, real-time pipeline updates with Redis pub/sub, and a FastAPI backend containerised with Docker.",
+    technologies: ["Next.js 14", "TypeScript", "FastAPI", "PostgreSQL", "PostGIS", "Redis", "Elasticsearch", "Docker"],
+    src: "/images/projectsImages/globalreach.svg",
+    images: ["/images/projectsImages/globalreach.svg"],
+    demo: "https://www.getyourclientsb2b.com/",
+    githubOwned: false,
+    featured: true,
+    outcome: "Live enterprise product — geo-aware lead search, real-time pipeline, full-text filtering.",
+    tags: ["AI", "B2B", "CRM", "FastAPI"],
   },
   {
-    id: 2,
-    title: "Clinic Management",
+    id: 11,
+    title: "AI Marketing Automation Platform",
+    shortDescription:
+      "Autonomous multi-channel marketing & growth engine for acquiring B2B clients at scale.",
     description:
-      "Clinic management app streamlines operations by enabling seamless management of appointments, consultations, staff, and patient records across different user roles like managers, doctors, and patients.",
-    technologies: "Javascript, NextJS, HTML, CSS, NodeJS, MySQL",
-    src: "/images/projectsImages/clinic1.png",
-    images: [
-      "/images/projectsImages/cliniclogin.png",
-      "/images/projectsImages/clinic1.png",
-      "/images/projectsImages/clinic2.png",
-    ],
-    demo: "https://clinicmanagement.sitemanagershub.com/login",
-    code: "https://github.com/diegotellezc/EasyShop",
-    tags: ["Next.js", "MySQL", "Node.js"],
+      "AI-powered social media and marketing automation platform. Autonomous multi-channel campaigns, Recharts analytics dashboard, Pydantic v2 data validation, SQLAlchemy 2.0 ORM with Alembic migrations. Integrates with LinkedIn, email, and social APIs for end-to-end B2B outreach automation.",
+    technologies: ["Next.js 14", "React 18", "TypeScript", "TailwindCSS", "TanStack Query v5", "FastAPI", "Pydantic v2", "SQLAlchemy", "Alembic"],
+    src: "/images/projectsImages/growth-platform.svg",
+    images: ["/images/projectsImages/growth-platform.svg"],
+    demo: "https://growth.getyourclientsb2b.com/",
+    githubOwned: false,
+    featured: true,
+    outcome: "Autonomous AI-driven outreach — reduced manual campaign setup from hours to minutes.",
+    tags: ["AI", "Automation", "Marketing", "FastAPI"],
   },
-  {
-    id: 3,
-    title: "Articence AI Calling",
-    description:
-      "A website that enables AI-powered calls to engage and assist customers efficiently.",
-    technologies: "Javascript, HTML, CSS, CMS",
-    src: "/images/projectsImages/temp1.png",
-    images: [
-      "/images/projectsImages/vocwebsite/vochome.png",
-      "/images/projectsImages/vocwebsite/voc.phone.png",
-      "/images/projectsImages/vocwebsite/voc.web.png",
-      "/images/projectsImages/temp1.png",
-      "/images/projectsImages/temp2.png",
-      "/images/projectsImages/temp3.png",
-    ],
-    demo: "https://voccall.articence.com/",
-    code: "https://github.com/diegotellezc/EasyShop",
-    tags: ["AI", "CMS", "JavaScript"],
-  },
+  // ── Other Projects ─────────────────────────────────────────────────────────
   {
     id: 4,
-    title: "VOC Articence",
+    title: "VOC — AI-Powered Call Center App",
+    shortDescription:
+      "Role-based enterprise call center with AI-driven conversation analysis and real-time WebSocket streams.",
     description:
-      "Customized data based on your information, pre-configured dashboards and reports, customized templates and question banks, easy help and reference, AI Analysis.",
-    technologies: "Javascript, React, HTML, CSS, Python, PostgreSQL",
+      "Built at Articence. AI-powered call center application featuring role-based access (admin/manager/user), real-time agent interaction via WebSockets, AI conversation analysis, MUI component library, Redux/Context state management, and AWS deployment.",
+    technologies: ["React.js", "MUI", "WebSockets", "Redux", "Python", "PostgreSQL", "AWS"],
     src: "/images/projectsImages/voc1.png",
     images: [
       "/images/projectsImages/voclogin.png",
@@ -76,51 +64,90 @@ const projects: Project[] = [
       "/images/projectsImages/voccall.png",
     ],
     demo: "https://demo.articence.com/",
-    code: "https://github.com/diegotellezc/EasyShop",
-    tags: ["React", "Python", "AI"],
+    githubOwned: false,
+    featured: false,
+    outcome: "Enterprise-grade AI call center deployed on AWS for Articence.",
+    tags: ["AI", "Real-time", "Enterprise"],
+  },
+  {
+    id: 1,
+    title: "Dynamic Online Learning Platform",
+    shortDescription:
+      "Multi-tenant e-learning platform serving students, teachers, and admins.",
+    description:
+      "Built at iLearningEngines. Full-featured e-learning platform with separate portals for students, teachers, and admins. Features course management, assessments, surveys, and data-driven progress insights. Frontend in React.js; contributed to Node.js + PostgreSQL backend.",
+    technologies: ["React.js", "Node.js", "PostgreSQL", "JavaScript", "HTML5", "CSS"],
+    src: "/images/projectsImages/ile1.png",
+    images: [
+      "/images/projectsImages/ilelogin.png",
+      "/images/projectsImages/ile1.png",
+      "/images/projectsImages/ile2.png",
+      "/images/projectsImages/ile3.png",
+    ],
+    demo: "https://production.aaisolutions.dev/login",
+    githubOwned: true,
+    code: "https://github.com/KishoreReact",
+    featured: false,
+    outcome: "Shipped to thousands of learners across education & enterprise.",
+    tags: ["Ed-Tech", "Full-Stack"],
+  },
+  {
+    id: 2,
+    title: "Clinic Management Web & Mobile App",
+    shortDescription:
+      "Cross-platform clinic operations app for appointments, staff, and patient records.",
+    description:
+      "Full-stack clinic management system with separate dashboards for managers, doctors, and patients. Handles appointment scheduling, consultation tracking, staff management, and patient records. Mobile companion built with React Native.",
+    technologies: ["Next.js", "React Native", "Node.js", "MySQL", "JavaScript"],
+    src: "/images/projectsImages/clinic1.png",
+    images: [
+      "/images/projectsImages/cliniclogin.png",
+      "/images/projectsImages/clinic1.png",
+      "/images/projectsImages/clinic2.png",
+    ],
+    demo: "https://clinicmanagement.sitemanagershub.com/login",
+    githubOwned: false,
+    featured: false,
+    outcome: "Streamlined multi-role clinic ops across web and mobile.",
+    tags: ["Healthcare", "Mobile", "Full-Stack"],
   },
   {
     id: 5,
-    title: "Ecommerce Shopclues",
+    title: "E-Commerce Web App",
+    shortDescription:
+      "Food e-commerce platform with cart, wishlist, and seamless checkout.",
     description:
-      "Browse a wide variety of food products, add your favorites to the wishlist, add items to the cart, and place orders seamlessly.",
-    technologies: "JavaScript, React, HTML, CSS, Python, PostgreSQL",
-    src: "/images/projectsImages/shopclues/shopLogin.jpeg",
+      "Browse a wide variety of food products, add favorites to a wishlist, manage cart, and place orders. Full product catalog with filtering, search, and order history. Backend with authentication and order processing.",
+    technologies: ["React.js", "JavaScript", "HTML", "CSS", "Python", "PostgreSQL"],
+    src: "/images/projectsImages/shopclues/shopHome.jpeg",
     images: [
       "/images/projectsImages/shopclues/shopLogin.jpeg",
       "/images/projectsImages/shopclues/shopHome.jpeg",
       "/images/projectsImages/shopclues/shop.shop.jpeg",
       "/images/projectsImages/shopclues/shop.detail.jpeg",
       "/images/projectsImages/shopclues/shop.cart.jpeg",
-      "/images/projectsImages/shopclues/shop.account.jpeg",
     ],
-    demo: "https://shop.gsgroup.co/gsglogin.php",
-    code: "https://github.com/diegotellezc/EasyShop",
-    tags: ["React", "E-commerce", "Python"],
+    demo: "https://shop.gsgroup.co/login",
+    githubOwned: false,
+    featured: false,
+    outcome: "End-to-end e-commerce with cart, wishlist, and checkout.",
+    tags: ["E-commerce", "React"],
   },
   {
     id: 6,
-    title: "MediSearch",
+    title: "E-Medicine Search & Buy App",
+    shortDescription:
+      "Healthcare app to browse, search, and purchase medicines.",
     description:
-      "Medicine shopping with MediSearch. Browse, shop, and manage your healthcare needs effortlessly, anytime, anywhere.",
-    technologies: "Javascript, React, HTML5, CSS",
+      "MediSearch lets users browse medicine catalogs, search by name or condition, and manage healthcare purchases. Clean UI with React, responsive design, and integration with medicine APIs.",
+    technologies: ["React.js", "JavaScript", "HTML5", "CSS"],
     src: "/images/projectsImages/emedi.png",
     images: ["/images/projectsImages/emedi.png"],
     demo: "https://cappsule.vercel.app/",
-    code: "https://github.com/diegotellezc/landing-accio-vocabulary",
-    tags: ["React", "Healthcare", "API"],
-  },
-  {
-    id: 7,
-    title: "Movie Watchlists",
-    description:
-      "Browse movies and add them to watchlists and share them with friends.",
-    technologies: "Javascript, React, HTML5, CSS3",
-    src: "/images/projectsImages/movie1.png",
-    images: ["/images/projectsImages/movie1.png"],
-    demo: "https://authenticate-iota.vercel.app/",
-    code: "https://github.com/diegotellezc/academloShop",
-    tags: ["React", "Movies", "Social"],
+    githubOwned: false,
+    featured: false,
+    outcome: "Instant medicine search and seamless purchase flow.",
+    tags: ["Healthcare", "React"],
   },
 ];
 

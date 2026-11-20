@@ -2,10 +2,54 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiExternalLink, FiGithub, FiX, FiChevronLeft, FiChevronRight } from "react-icons/fi";
-import Image from "next/image";
+import {
+  FiExternalLink,
+  FiGithub,
+  FiX,
+  FiChevronLeft,
+  FiChevronRight,
+  FiStar,
+  FiArrowUpRight,
+} from "react-icons/fi";
 import SectionHeading from "@/components/ui/SectionHeading";
 import projects, { Project } from "@/data/projects";
+
+// ── Placeholder for missing screenshots ─────────────────────────────────────
+function ImageWithFallback({
+  src,
+  alt,
+  className,
+  projectId,
+}: {
+  src: string;
+  alt: string;
+  className?: string;
+  projectId: number;
+}) {
+  const [failed, setFailed] = useState(false);
+
+  if (failed) {
+    return (
+      <div className={`${className} flex flex-col items-center justify-center bg-deep-space/80 gap-3`}>
+        <div className="w-16 h-16 rounded-2xl glass border border-border-glass flex items-center justify-center">
+          <FiArrowUpRight className="text-ghost-white/20" size={28} />
+        </div>
+        <p className="text-ghost-white/20 text-xs text-center px-4">
+          Screenshot coming soon
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={className}
+      onError={() => setFailed(true)}
+    />
+  );
+}
 
 // ── Project Detail Overlay ───────────────────────────────────────────────────
 function ProjectDetail({
@@ -16,10 +60,6 @@ function ProjectDetail({
   onClose: () => void;
 }) {
   const [imageIndex, setImageIndex] = useState(0);
-  const techs =
-    typeof project.technologies === "string"
-      ? project.technologies.split(",").map((t) => t.trim())
-      : project.technologies;
 
   const nextImage = () =>
     setImageIndex((i) => (i + 1) % project.images.length);
@@ -62,16 +102,22 @@ function ProjectDetail({
               transition={{ duration: 0.25 }}
               className="absolute inset-0"
             >
-              <img
+              <ImageWithFallback
                 src={project.images[imageIndex]}
                 alt={`${project.title} screenshot ${imageIndex + 1}`}
                 className="w-full h-full object-cover"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = `https://picsum.photos/seed/${project.id}/800/400`;
-                }}
+                projectId={project.id}
               />
             </motion.div>
           </AnimatePresence>
+
+          {/* Featured badge */}
+          {project.featured && (
+            <div className="absolute top-3 left-3 flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-gradient-to-r from-cyber-blue to-neon-violet text-obsidian">
+              <FiStar size={10} />
+              Featured
+            </div>
+          )}
 
           {/* Image controls */}
           {project.images.length > 1 && (
@@ -93,8 +139,8 @@ function ProjectDetail({
                   <button
                     key={i}
                     onClick={() => setImageIndex(i)}
-                    className={`w-1.5 h-1.5 rounded-full transition-all ${
-                      i === imageIndex ? "bg-cyber-blue w-4" : "bg-ghost-white/30"
+                    className={`h-1.5 rounded-full transition-all ${
+                      i === imageIndex ? "bg-cyber-blue w-4" : "bg-ghost-white/30 w-1.5"
                     }`}
                   />
                 ))}
@@ -112,18 +158,26 @@ function ProjectDetail({
         </div>
 
         {/* Content */}
-        <div className="p-6 sm:p-8">
-          <h3 className="text-2xl font-bold gradient-text mb-3">{project.title}</h3>
+        <div className="p-6 sm:p-8 max-h-[60vh] overflow-y-auto">
+          <h3 className="text-2xl font-bold gradient-text mb-1">{project.title}</h3>
+
+          {/* Outcome */}
+          {project.outcome && (
+            <p className="text-cyber-blue/70 text-xs font-medium mb-3 flex items-center gap-1.5">
+              <FiStar size={11} /> {project.outcome}
+            </p>
+          )}
+
           <p className="text-ghost-white/60 text-sm leading-relaxed mb-5">
             {project.description}
           </p>
 
           {/* Tags */}
           <div className="flex flex-wrap gap-2 mb-6">
-            {techs.map((tech) => (
+            {project.technologies.map((tech) => (
               <span
                 key={tech}
-                className="px-2.5 py-1 text-xs font-medium glass border border-cyber-blue/15 text-cyber-blue rounded-full"
+                className="px-2.5 py-1 text-xs font-mono font-medium glass border border-cyber-blue/15 text-cyber-blue rounded-full"
               >
                 {tech}
               </span>
@@ -136,24 +190,24 @@ function ProjectDetail({
               href={project.demo}
               target="_blank"
               rel="noopener noreferrer"
-              id={`project-detail-demo-${project.id}`}
               className="flex-1 flex items-center justify-center gap-2 py-3 text-sm font-semibold text-obsidian rounded-xl bg-gradient-to-r from-cyber-blue to-neon-violet"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
             >
               <FiExternalLink size={15} /> Live Demo
             </motion.a>
-            <motion.a
-              href={project.code}
-              target="_blank"
-              rel="noopener noreferrer"
-              id={`project-detail-code-${project.id}`}
-              className="flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-ghost-white rounded-xl glass gradient-border"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <FiGithub size={15} /> Code
-            </motion.a>
+            {project.githubOwned && project.code && (
+              <motion.a
+                href={project.code}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 px-6 py-3 text-sm font-semibold text-ghost-white rounded-xl glass gradient-border"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <FiGithub size={15} /> Code
+              </motion.a>
+            )}
           </div>
         </div>
       </motion.div>
@@ -171,55 +225,63 @@ function ProjectCard({
   onClick: () => void;
   index: number;
 }) {
-  const techs =
-    typeof project.technologies === "string"
-      ? project.technologies.split(",").map((t) => t.trim()).slice(0, 3)
-      : (project.technologies as string[]).slice(0, 3);
+  const displayTechs = project.technologies.slice(0, 3);
 
   return (
     <motion.div
       layoutId={`project-card-${project.id}`}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ delay: index * 0.08, duration: 0.5, ease: "easeOut" }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ delay: index * 0.07, duration: 0.5, ease: "easeOut" }}
       onClick={onClick}
       className="group glass gradient-border rounded-2xl overflow-hidden cursor-pointer hover:shadow-card-hover transition-all duration-300"
       whileHover={{ y: -6 }}
     >
       {/* Image */}
       <div className="relative h-44 overflow-hidden bg-deep-space">
-        <img
+        <ImageWithFallback
           src={project.src}
           alt={project.title}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = `https://picsum.photos/seed/${project.id + 10}/600/300`;
-          }}
+          projectId={project.id}
         />
         {/* Overlay gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-obsidian/80 via-transparent to-transparent" />
+
+        {/* Featured badge */}
+        {project.featured && (
+          <div className="absolute top-2.5 left-2.5 flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-gradient-to-r from-cyber-blue to-neon-violet text-obsidian">
+            <FiStar size={9} />
+            Featured AI
+          </div>
+        )}
       </div>
 
       {/* Body */}
       <div className="p-5">
-        <h3 className="font-bold text-ghost-white group-hover:text-cyber-blue transition-colors duration-200 mb-2 line-clamp-1">
+        <h3 className="font-bold text-ghost-white group-hover:text-cyber-blue transition-colors duration-200 mb-1.5 line-clamp-1 text-sm">
           {project.title}
         </h3>
         <p className="text-ghost-white/50 text-xs leading-relaxed line-clamp-2 mb-4">
-          {project.description}
+          {project.shortDescription}
         </p>
 
         {/* Tech chips */}
         <div className="flex flex-wrap gap-1.5 mb-4">
-          {techs.map((tech) => (
+          {displayTechs.map((tech) => (
             <span
               key={tech}
-              className="px-2 py-0.5 text-[10px] font-medium glass border border-border-glass text-ghost-white/40 rounded-full"
+              className="px-2 py-0.5 text-[10px] font-mono font-medium glass border border-border-glass text-ghost-white/40 rounded-full"
             >
               {tech}
             </span>
           ))}
+          {project.technologies.length > 3 && (
+            <span className="px-2 py-0.5 text-[10px] font-mono text-ghost-white/25 rounded-full">
+              +{project.technologies.length - 3}
+            </span>
+          )}
         </div>
 
         {/* CTA */}
@@ -232,24 +294,24 @@ function ProjectCard({
               href={project.demo}
               target="_blank"
               rel="noopener noreferrer"
-              id={`project-demo-${project.id}`}
               onClick={(e) => e.stopPropagation()}
               className="text-ghost-white/30 hover:text-cyber-blue transition-colors"
               aria-label="Live demo"
             >
               <FiExternalLink size={14} />
             </a>
-            <a
-              href={project.code}
-              target="_blank"
-              rel="noopener noreferrer"
-              id={`project-code-${project.id}`}
-              onClick={(e) => e.stopPropagation()}
-              className="text-ghost-white/30 hover:text-cyber-blue transition-colors"
-              aria-label="Source code"
-            >
-              <FiGithub size={14} />
-            </a>
+            {project.githubOwned && project.code && (
+              <a
+                href={project.code}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="text-ghost-white/30 hover:text-cyber-blue transition-colors"
+                aria-label="Source code"
+              >
+                <FiGithub size={14} />
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -261,6 +323,11 @@ function ProjectCard({
 export default function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
+  // Featured first, then rest
+  const featured = projects.filter((p) => p.featured);
+  const rest = projects.filter((p) => !p.featured);
+  const ordered = [...featured, ...rest];
+
   return (
     <section id="projects" className="section-padding relative">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border-glass to-transparent" />
@@ -270,18 +337,64 @@ export default function Projects() {
           label="My Work"
           title="Featured"
           highlight="Projects"
-          description="A collection of projects I've built — from AI-powered platforms to full-stack web applications."
+          description="AI-powered platforms to full-stack web apps — built, shipped, and live in production."
         />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {projects.map((project, index) => (
-            <ProjectCard
-              key={project.id}
-              project={project}
-              index={index}
-              onClick={() => setSelectedProject(project)}
-            />
-          ))}
+        {/* Featured label */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="flex items-center gap-3 mb-6"
+        >
+          <span className="flex items-center gap-1.5 text-xs font-semibold text-cyber-blue uppercase tracking-widest">
+            <FiStar size={12} /> AI Projects
+          </span>
+          <div className="flex-1 h-px bg-gradient-to-r from-cyber-blue/30 to-transparent" />
+        </motion.div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+          {ordered.map((project, index) => {
+            // Add a visual divider label before non-featured items
+            if (!project.featured && ordered[index - 1]?.featured) {
+              return (
+                <div key={`group-${project.id}`} className="col-span-full">
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    className="flex items-center gap-3 mb-6 mt-2"
+                  >
+                    <span className="text-xs font-semibold text-ghost-white/30 uppercase tracking-widest">
+                      More Projects
+                    </span>
+                    <div className="flex-1 h-px bg-ghost-white/10" />
+                  </motion.div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    {ordered
+                      .filter((p) => !p.featured)
+                      .map((p, i) => (
+                        <ProjectCard
+                          key={p.id}
+                          project={p}
+                          index={i}
+                          onClick={() => setSelectedProject(p)}
+                        />
+                      ))}
+                  </div>
+                </div>
+              );
+            }
+            if (!project.featured) return null;
+            return (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                index={index}
+                onClick={() => setSelectedProject(project)}
+              />
+            );
+          })}
         </div>
       </div>
 

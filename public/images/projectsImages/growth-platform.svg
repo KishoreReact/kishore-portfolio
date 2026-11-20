@@ -1,0 +1,34 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#050505"/>
+      <stop offset="100%" style="stop-color:#0A0A1A"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00F0FF"/>
+      <stop offset="100%" style="stop-color:#8A2BE2"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="200" cy="200" r="250" fill="#8A2BE2" fill-opacity="0.04"/>
+  <circle cx="1000" cy="430" r="250" fill="#00F0FF" fill-opacity="0.04"/>
+  <!-- Badge -->
+  <rect x="440" y="200" width="320" height="32" rx="16" fill="none" stroke="url(#accent)" stroke-width="1" stroke-opacity="0.4"/>
+  <text x="600" y="221" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#00F0FF" letter-spacing="3" font-weight="600">FEATURED AI PROJECT</text>
+  <!-- Title line 1 -->
+  <text x="600" y="285" text-anchor="middle" font-family="system-ui,sans-serif" font-size="36" fill="white" font-weight="700">AI Marketing</text>
+  <!-- Title line 2 -->
+  <text x="600" y="330" text-anchor="middle" font-family="system-ui,sans-serif" font-size="36" fill="white" font-weight="700">Automation Platform</text>
+  <!-- Gradient underline -->
+  <rect x="380" y="348" width="440" height="3" rx="2" fill="url(#accent)"/>
+  <!-- Subtitle -->
+  <text x="600" y="390" text-anchor="middle" font-family="system-ui,sans-serif" font-size="17" fill="#F0F0F0" fill-opacity="0.5">Autonomous multi-channel B2B growth engine</text>
+  <!-- Tech stack -->
+  <text x="600" y="440" text-anchor="middle" font-family="monospace" font-size="13" fill="#00F0FF" fill-opacity="0.6">Next.js 14 · React 18 · FastAPI · Pydantic v2 · SQLAlchemy · TanStack Query</text>
+  <!-- URL -->
+  <text x="600" y="488" text-anchor="middle" font-family="monospace" font-size="12" fill="#F0F0F0" fill-opacity="0.3">growth.getyourclientsb2b.com</text>
+  <circle cx="50" cy="50" r="4" fill="#8A2BE2" fill-opacity="0.3"/>
+  <circle cx="1150" cy="50" r="4" fill="#00F0FF" fill-opacity="0.3"/>
+  <circle cx="50" cy="580" r="4" fill="#00F0FF" fill-opacity="0.3"/>
+  <circle cx="1150" cy="580" r="4" fill="#8A2BE2" fill-opacity="0.3"/>
+</svg>
