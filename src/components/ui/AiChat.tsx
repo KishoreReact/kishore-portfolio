@@ -106,7 +106,7 @@ export default function AiChat() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-ghost-white">Ask my AI</p>
-                <p className="text-[10px] text-ghost-white/30">Powered by Claude · grounded in my resume</p>
+                <p className="text-[10px] text-ghost-white/30">Powered by Gemini · grounded in my resume</p>
               </div>
               <div className="ml-auto flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
