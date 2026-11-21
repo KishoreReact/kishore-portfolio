@@ -1,8 +1,9 @@
 "use client";
 
 import { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { FiArrowDown, FiLinkedin, FiDownload, FiSend, FiZap, FiCheckCircle } from "react-icons/fi";
+import { FiArrowDown, FiLinkedin, FiDownload, FiSend, FiZap, FiGithub } from "react-icons/fi";
 import { SiGooglegemini } from "react-icons/si";
 import { useMousePosition } from "@/hooks/useMousePosition";
 import { siteConfig } from "@/data/config";
@@ -172,7 +173,7 @@ function HeroAiChat() {
       initial={{ opacity: 0, scale: 0.94, y: 30 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       transition={{ delay: 0.5, duration: 0.7, ease: "easeOut" }}
-      className="relative w-full max-w-lg lg:max-w-none glass gradient-border rounded-3xl p-5 sm:p-6 shadow-2xl backdrop-blur-2xl overflow-hidden border border-cyber-blue/20"
+      className="relative w-full h-full glass gradient-border rounded-3xl p-5 sm:p-6 lg:p-7 shadow-2xl backdrop-blur-2xl overflow-hidden border border-cyber-blue/20 flex flex-col justify-between"
       style={{
         boxShadow: "0 20px 60px -15px rgba(0, 240, 255, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.08)",
       }}
@@ -218,7 +219,7 @@ function HeroAiChat() {
       </div>
 
       {/* Chat messages viewport */}
-      <div className="relative z-10 my-4 h-[210px] sm:h-[230px] overflow-y-auto pr-1 space-y-3.5 scrollbar-thin">
+      <div className="relative z-10 my-4 h-[280px] sm:h-[320px] lg:h-[340px] xl:h-[370px] overflow-y-auto pr-1 space-y-3.5 scrollbar-thin">
         {messages.map((msg, i) => (
           <motion.div
             key={i}
@@ -228,11 +229,10 @@ function HeroAiChat() {
             className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
           >
             <div
-              className={`max-w-[88%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed ${
-                msg.role === "user"
+              className={`max-w-[88%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed ${msg.role === "user"
                   ? "bg-gradient-to-r from-cyber-blue to-neon-violet text-obsidian font-medium shadow-md"
                   : "glass border border-border-glass text-ghost-white/85 bg-white/[0.02]"
-              }`}
+                }`}
             >
               {msg.content.split("\n").map((line, idx) => (
                 <span key={idx} className="block mb-0.5 last:mb-0">
@@ -314,14 +314,14 @@ function HeroAiChat() {
 // ── Staggered word reveal ────────────────────────────────────────────────────
 function AnimatedTitle({ text }: { text: string }) {
   return (
-    <div className="flex flex-wrap gap-x-3 gap-y-1">
+    <div className="flex flex-wrap gap-x-2 gap-y-1">
       {text.split(" ").map((word, i) => (
         <motion.span
           key={i}
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 + i * 0.12, duration: 0.5, ease: "easeOut" }}
-          className="block"
+          transition={{ delay: 0.3 + i * 0.1, duration: 0.5, ease: "easeOut" }}
+          className="inline-block"
         >
           {word}
         </motion.span>
@@ -361,135 +361,143 @@ export default function Hero() {
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-neon-violet/10 rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyber-blue/10 rounded-full blur-[140px] pointer-events-none" />
 
-      {/* ── Content Grid ──────────────────────────────────────────────────── */}
+      {/* ── Content Grid: Two Unique Boxes (Left: Profile/Details/Stats/Image, Right: Chatbot) ── */}
       <motion.div
         style={{ translateY }}
-        className="relative z-10 container-max w-full px-6 pt-12 lg:pt-24 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center"
+        className="relative z-10 container-max w-full px-4 sm:px-6 pt-12 lg:pt-20 pb-12 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch"
       >
-        {/* Left Column: Bio & Intro (7 cols on lg) */}
-        <div className="lg:col-span-7 space-y-6">
-          {/* Badge */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 glass border border-cyber-blue/25 rounded-full text-xs font-semibold text-cyber-blue tracking-widest uppercase shadow-sm"
-          >
-            <span className="w-2 h-2 rounded-full bg-cyber-blue animate-pulse" />
-            Available for work
-          </motion.div>
+        {/* ── Left Box: Profile, Identity, Stats & Actions (inspired by Image 2) ── */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.94, y: 30 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.7, ease: "easeOut" }}
+          className="lg:col-span-7 relative w-full glass gradient-border rounded-3xl p-5 sm:p-6 lg:p-7 shadow-2xl backdrop-blur-2xl overflow-hidden border border-cyber-blue/20 flex flex-col justify-between gap-5 sm:gap-6"
+          style={{
+            boxShadow:
+              "0 20px 60px -15px rgba(0, 240, 255, 0.12), 0 0 0 1px rgba(255, 255, 255, 0.08)",
+          }}
+        >
+          {/* Ambient lighting */}
+          <div className="absolute -top-24 -left-24 w-60 h-60 bg-cyber-blue/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-24 -right-24 w-60 h-60 bg-neon-violet/15 rounded-full blur-3xl pointer-events-none" />
 
-          {/* Name */}
-          <div className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[1.05] tracking-tight">
-            <motion.span
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.6 }}
-              className="block text-ghost-white"
-            >
-              I&apos;m
-            </motion.span>
-            <span className="block gradient-text text-glow-blue">
-              <AnimatedTitle text={siteConfig.name} />
-            </span>
+          {/* Top Row: Sub-panel with Photo + Location (Left) and Name + Craft + Tech (Right) */}
+          <div className="relative z-10 grid grid-cols-1 sm:grid-cols-12 gap-5 sm:gap-6 items-start">
+            {/* Left Sub-Column: Photo & Location Card (inspired by Image 2) */}
+            <div className="sm:col-span-5 flex flex-col gap-3">
+              {/* Profile Photo */}
+              <div className="relative w-full aspect-[4/5] sm:aspect-square md:aspect-[4/5] rounded-2xl overflow-hidden border border-white/10 shadow-xl group bg-obsidian/60">
+                <Image
+                  src="/images/kishore-hero.png"
+                  alt={siteConfig.name}
+                  fill
+                  priority
+                  className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 250px, 320px"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-obsidian/80 via-transparent to-transparent opacity-60" />
+
+                {/* Subtle corner badge */}
+                <div className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-semibold bg-obsidian/75 backdrop-blur-md border border-white/10 text-ghost-white/90 flex items-center gap-1.5 shadow-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyber-blue animate-pulse" />
+                  Kishore C
+                </div>
+              </div>
+
+              {/* Location & Timezone Card (direct match to Image 2 style) */}
+              <div className="relative rounded-2xl p-3 sm:p-3.5 glass border border-border-glass bg-obsidian/50 overflow-hidden flex flex-col justify-between">
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-neon-violet/15 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-gradient-to-b from-cyber-blue to-neon-violet" />
+
+                <div className="pl-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs sm:text-sm font-bold text-ghost-white tracking-wider font-mono uppercase">
+                      Palakkad, India
+                    </span>
+                    <span className="text-[10px] font-mono text-neon-violet font-semibold">
+                      GMT+5:30
+                    </span>
+                  </div>
+                  <div className="text-[10px] text-ghost-white/50 font-mono mt-0.5">
+                    10.7867° N, 76.6548° E
+                  </div>
+                  <div className="mt-2 pt-2 border-t border-white/5 flex items-center gap-1.5 text-[11px] text-green-400 font-medium">
+                    <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+                    Open to collaboration & freelance
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Sub-Column: Identity, Craft, Tagline & Tech Stack */}
+            <div className="sm:col-span-7 flex flex-col justify-between space-y-3.5">
+              <div>
+                {/* Available status badge */}
+                <div className="inline-flex items-center gap-2 px-3 py-1 glass border border-cyber-blue/30 rounded-full text-[11px] font-semibold text-cyber-blue tracking-wider uppercase mb-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-cyber-blue animate-pulse" />
+                  AI Architect & Full Stack
+                </div>
+
+                {/* Name */}
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-ghost-white leading-tight">
+                  I&apos;m{" "}
+                  <span className="gradient-text text-glow-blue inline-block">
+                    <AnimatedTitle text={siteConfig.name} />
+                  </span>
+                </h1>
+
+                {/* Role */}
+                <div className="text-sm sm:text-base font-semibold text-ghost-white/80 mt-1">
+                  {siteConfig.title}
+                </div>
+
+                {/* Rotating keywords typewriter */}
+                <div className="text-xs sm:text-sm text-ghost-white/50 font-mono mt-1">
+                  <RotatingTypewriter />
+                </div>
+
+                {/* Tagline / Craft statement (matching Image 2 tone) */}
+                <p className="text-ghost-white/60 text-xs sm:text-sm leading-relaxed mt-2.5">
+                  Building scalable <strong className="text-ghost-white font-medium">AI agents</strong>,{" "}
+                  <strong className="text-ghost-white font-medium">real-time platforms</strong>, and{" "}
+                  <strong className="text-ghost-white font-medium">production web apps</strong> from pixel to production.
+                </p>
+              </div>
+
+              {/* Tech Stack Pills (inspired by Image 2: NEXT.JS, REACT, TS, PYTHON, etc.) */}
+              <div>
+                <div className="text-[10px] uppercase font-mono tracking-wider text-ghost-white/40 mb-1.5">
+                  Core Technologies
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    "REACT.JS",
+                    "NEXT.JS 14",
+                    "TYPESCRIPT",
+                    "PYTHON",
+                    "AI AGENTS",
+                    "FASTAPI",
+                    "WEBSOCKETS",
+                  ].map((tech) => (
+                    <span
+                      key={tech}
+                      className="text-[10px] font-mono px-2 py-0.5 rounded-md glass border border-white/10 text-ghost-white/75 hover:border-cyber-blue/40 hover:text-cyber-blue transition-colors"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Collaboration Note (Image 2 style) */}
+              <div className="text-[11px] text-ghost-white/50 leading-relaxed font-mono">
+                Architecting real-time enterprise AI platforms & LLM agent workflows. Feel free to invite me to collaborate.
+              </div>
+            </div>
           </div>
 
-          {/* Role */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.7, duration: 0.5 }}
-            className="text-xl sm:text-2xl font-semibold text-ghost-white/80"
-          >
-            {siteConfig.title}
-          </motion.div>
-
-          {/* Typewriter tagline */}
-          <motion.p
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.85, duration: 0.5 }}
-            className="text-ghost-white/60 text-base sm:text-lg leading-relaxed max-w-xl"
-          >
-            {siteConfig.tagline}
-          </motion.p>
-
-          {/* Rotating keywords */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.95, duration: 0.5 }}
-            className="text-sm sm:text-base text-ghost-white/50 font-mono"
-          >
-            <RotatingTypewriter />
-          </motion.div>
-
-          {/* CTA Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.0, duration: 0.5 }}
-            className="flex flex-wrap gap-4 pt-2"
-          >
-            <motion.button
-              onClick={scrollToAbout}
-              id="hero-cta-work"
-              className="px-7 py-3.5 font-semibold text-obsidian rounded-xl bg-gradient-to-r from-cyber-blue to-neon-violet glow-blue text-sm"
-              whileHover={{ scale: 1.05, boxShadow: "0 0 35px rgba(0,240,255,0.45)" }}
-              whileTap={{ scale: 0.96 }}
-            >
-              View My Work
-            </motion.button>
-            <motion.a
-              href={siteConfig.resumeUrl}
-              download
-              id="hero-cta-resume"
-              className="px-7 py-3.5 font-semibold text-ghost-white rounded-xl glass gradient-border text-sm flex items-center gap-2 hover:text-cyber-blue transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.96 }}
-            >
-              <FiDownload size={16} /> Resume
-            </motion.a>
-            <motion.a
-              href={siteConfig.social.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              id="hero-cta-linkedin"
-              className="px-7 py-3.5 font-semibold text-ghost-white rounded-xl glass gradient-border text-sm flex items-center gap-2 hover:text-cyber-blue transition-colors"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.96 }}
-            >
-              <FiLinkedin size={16} /> LinkedIn
-            </motion.a>
-          </motion.div>
-
-          {/* Social row */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.15, duration: 0.5 }}
-            className="flex items-center gap-4 pt-2"
-          >
-            <a
-              href={siteConfig.social.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-ghost-white/40 hover:text-cyber-blue transition-colors"
-              aria-label="Instagram"
-            >
-              <BsInstagram size={20} />
-            </a>
-            <div className="h-px max-w-[60px] bg-ghost-white/10" />
-            <span className="text-ghost-white/40 text-xs font-mono">
-              {siteConfig.location} | {siteConfig.phone}
-            </span>
-          </motion.div>
-        </div>
-
-        {/* Right Column: Hero AI Chat + Verified Stat Metrics (5 cols on lg) */}
-        <div className="lg:col-span-5 flex flex-col gap-4 items-center lg:items-stretch">
-          {/* Key Metric Stat Cards — guaranteed non-zero values */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3 w-full">
+          {/* Middle Section: The 4 Verified Key Metric Stat Cards on the Left Side */}
+          <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 border-t border-border-glass">
             {statItems.map((s, idx) => (
               <StatPill
                 key={s.label}
@@ -501,7 +509,67 @@ export default function Hero() {
             ))}
           </div>
 
-          {/* Live Hero Gemini AI Chat Widget */}
+          {/* Bottom Action Bar: CTAs & Social Links */}
+          <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 pt-2">
+            <div className="flex flex-wrap gap-2.5">
+              <motion.button
+                onClick={scrollToAbout}
+                id="hero-cta-work"
+                className="px-5 py-2.5 font-semibold text-obsidian rounded-xl bg-gradient-to-r from-cyber-blue to-neon-violet glow-blue text-xs sm:text-sm"
+                whileHover={{ scale: 1.04, boxShadow: "0 0 25px rgba(0,240,255,0.4)" }}
+                whileTap={{ scale: 0.96 }}
+              >
+                View My Work
+              </motion.button>
+              <motion.a
+                href={siteConfig.resumeUrl}
+                download
+                id="hero-cta-resume"
+                className="px-4 py-2.5 font-semibold text-ghost-white rounded-xl glass gradient-border text-xs sm:text-sm flex items-center gap-1.5 hover:text-cyber-blue transition-colors"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+              >
+                <FiDownload size={14} /> Resume
+              </motion.a>
+              <motion.a
+                href={siteConfig.social.linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                id="hero-cta-linkedin"
+                className="px-4 py-2.5 font-semibold text-ghost-white rounded-xl glass gradient-border text-xs sm:text-sm flex items-center gap-1.5 hover:text-cyber-blue transition-colors"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+              >
+                <FiLinkedin size={14} /> LinkedIn
+              </motion.a>
+            </div>
+
+            {/* Social icons */}
+            <div className="flex items-center gap-3">
+              <a
+                href={siteConfig.social.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ghost-white/40 hover:text-cyber-blue transition-colors"
+                aria-label="Instagram"
+              >
+                <BsInstagram size={18} />
+              </a>
+              <a
+                href={siteConfig.social.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ghost-white/40 hover:text-cyber-blue transition-colors"
+                aria-label="GitHub"
+              >
+                <FiGithub size={18} />
+              </a>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* ── Right Box: ONLY Hero AI Chat Widget ── */}
+        <div className="lg:col-span-5 flex flex-col h-full">
           <HeroAiChat />
         </div>
       </motion.div>
