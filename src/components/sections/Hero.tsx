@@ -3,11 +3,12 @@
 import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { FiArrowDown, FiLinkedin, FiDownload, FiSend, FiZap, FiGithub } from "react-icons/fi";
+import { FiArrowDown, FiLinkedin, FiDownload, FiSend, FiZap, FiGithub, FiCalendar } from "react-icons/fi";
 import { SiGooglegemini } from "react-icons/si";
 import { useMousePosition } from "@/hooks/useMousePosition";
 import { siteConfig } from "@/data/config";
 import { BsInstagram, BsStars } from "react-icons/bs";
+import { useBooking } from "@/context/BookingContext";
 
 // ── Typewriter / rotating-word effect ──────────────────────────────────────
 const rotatingWords = [
@@ -340,6 +341,7 @@ function AnimatedTitle({ text }: { text: string }) {
 }
 
 export default function Hero() {
+  const { openBooking } = useBooking();
   const { normalizedX, normalizedY } = useMousePosition();
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -525,6 +527,15 @@ export default function Hero() {
           {/* Bottom Action Bar: CTAs & Social Links */}
           <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 pt-2">
             <div className="flex flex-wrap gap-2.5">
+              <motion.button
+                onClick={() => openBooking()}
+                id="hero-cta-book-call"
+                className="px-4 py-2.5 font-semibold text-ghost-white rounded-xl glass border border-cyber-blue/40 text-xs sm:text-sm flex items-center gap-1.5 hover:text-cyber-blue hover:border-cyber-blue hover:shadow-lg hover:shadow-cyber-blue/20 transition-all"
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.96 }}
+              >
+                <FiCalendar size={14} className="text-cyber-blue" /> Book a Call
+              </motion.button>
               <motion.button
                 onClick={scrollToProjects}
                 id="hero-cta-work"

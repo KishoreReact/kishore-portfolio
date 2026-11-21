@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { siteConfig } from "@/data/config";
-import { FiBriefcase } from "react-icons/fi";
+import { FiBriefcase, FiCalendar } from "react-icons/fi";
+import { useBooking } from "@/context/BookingContext";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -15,6 +16,7 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const { openBooking } = useBooking();
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -110,16 +112,14 @@ export default function Navbar() {
 
           {/* Right: Hire Me + Book a Call */}
           <div className="hidden md:flex items-center gap-2">
-            <motion.a
-              href={siteConfig.bookingUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-ghost-white/60 rounded-lg glass border border-border-glass hover:border-ghost-white/20 hover:text-ghost-white transition-all"
+            <motion.button
+              onClick={() => openBooking()}
+              className="flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-ghost-white rounded-lg glass border border-cyber-blue/30 hover:border-cyber-blue hover:text-cyber-blue hover:shadow-sm hover:shadow-cyber-blue/30 transition-all"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.95 }}
             >
-              <FiBriefcase size={13} /> Book a Call
-            </motion.a>
+              <FiCalendar size={14} className="text-cyber-blue" /> Book a Call
+            </motion.button>
             <motion.button
               onClick={() => scrollTo("#contact")}
               className="flex items-center gap-2 px-5 py-2 text-sm font-semibold text-obsidian rounded-lg bg-gradient-to-r from-cyber-blue to-neon-violet glow-blue"
@@ -188,17 +188,18 @@ export default function Navbar() {
               >
                 Hire Me
               </motion.button>
-              <motion.a
-                href={siteConfig.bookingUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <motion.button
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.46 }}
-                className="w-full mt-2 px-5 py-3 font-medium text-ghost-white/70 rounded-lg glass border border-border-glass flex items-center justify-center gap-2 text-sm"
+                onClick={() => {
+                  setMenuOpen(false);
+                  openBooking();
+                }}
+                className="w-full mt-2 px-5 py-3 font-medium text-ghost-white rounded-lg glass border border-cyber-blue/30 flex items-center justify-center gap-2 text-sm hover:border-cyber-blue"
               >
-                <FiBriefcase size={14} /> Book a Call
-              </motion.a>
+                <FiCalendar size={14} className="text-cyber-blue" /> Book a Call
+              </motion.button>
             </div>
           </motion.div>
         )}

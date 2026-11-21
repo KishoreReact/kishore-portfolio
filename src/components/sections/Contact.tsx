@@ -3,11 +3,12 @@
 import { useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import emailjs from "@emailjs/browser";
-import { FiSend, FiUser, FiMail, FiMessageSquare, FiCheckCircle, FiAlertCircle, FiGithub, FiLinkedin, FiTwitter } from "react-icons/fi";
+import { FiSend, FiUser, FiMail, FiMessageSquare, FiCheckCircle, FiAlertCircle, FiGithub, FiLinkedin, FiTwitter, FiCalendar } from "react-icons/fi";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { siteConfig } from "@/data/config";
 import { BsInstagram } from "react-icons/bs";
 import { BiPhone } from "react-icons/bi";
+import { useBooking } from "@/context/BookingContext";
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 
@@ -100,6 +101,7 @@ const socialLinks = [
 ];
 
 export default function Contact() {
+  const { openBooking } = useBooking();
   const formRef = useRef<HTMLFormElement>(null);
   const [status, setStatus] = useState<FormStatus>("idle");
 
@@ -173,6 +175,33 @@ export default function Contact() {
                   <span className="text-sm text-ghost-white/50">{siteConfig.phone}</span>
                 </div>
               </div>
+            </div>
+
+            {/* Direct Calendar Booking Card */}
+            <div className="glass gradient-border rounded-2xl p-5 border border-cyber-blue/30 bg-cyber-blue/[0.03] space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-cyber-blue font-semibold flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-cyber-blue animate-pulse" />
+                  Instant Calendar Booking
+                </span>
+                <span className="text-[11px] font-mono text-ghost-white/40">30 Min Call</span>
+              </div>
+              <h4 className="text-base font-bold text-ghost-white">
+                Want to talk directly? Book a 1-on-1 strategy call.
+              </h4>
+              <p className="text-xs text-ghost-white/50 leading-relaxed">
+                Pick a date & time that suits you. Kishore will receive your request immediately and send the Google Meet invite.
+              </p>
+              <motion.button
+                type="button"
+                onClick={() => openBooking()}
+                id="contact-book-call-btn"
+                className="w-full py-2.5 px-4 rounded-xl font-semibold text-obsidian bg-gradient-to-r from-cyber-blue to-neon-violet glow-blue text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <FiCalendar size={15} /> Open Calendar & Book
+              </motion.button>
             </div>
 
             {/* Social links */}

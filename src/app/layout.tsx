@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Outfit, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import dynamic from "next/dynamic";
 import "./globals.css";
+import { BookingProvider } from "@/context/BookingContext";
+import BookingModal from "@/components/ui/BookingModal";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -110,7 +112,10 @@ export default function RootLayout({
       >
         {/* Global fixed 3D background — behind all HTML (z-index: 0) */}
         <GlobalSceneContainer />
-        {children}
+        <BookingProvider>
+          {children}
+          <BookingModal />
+        </BookingProvider>
       </body>
     </html>
   );
