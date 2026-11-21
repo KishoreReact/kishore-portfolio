@@ -352,6 +352,10 @@ export default function Hero() {
     document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const scrollToProjects = () => {
+    document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   const statItems = [
     { value: siteConfig.yearsExperience, suffix: "+", label: "Years Exp." },
     { value: siteConfig.projectsCompleted, suffix: "+", label: "Projects Shipped" },
@@ -522,13 +526,13 @@ export default function Hero() {
           <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 pt-2">
             <div className="flex flex-wrap gap-2.5">
               <motion.button
-                onClick={scrollToAbout}
+                onClick={scrollToProjects}
                 id="hero-cta-work"
                 className="px-5 py-2.5 font-semibold text-obsidian rounded-xl bg-gradient-to-r from-cyber-blue to-neon-violet glow-blue text-xs sm:text-sm"
                 whileHover={{ scale: 1.04, boxShadow: "0 0 25px rgba(0,240,255,0.4)" }}
                 whileTap={{ scale: 0.96 }}
               >
-                View My Work
+                View Projects
               </motion.button>
               <motion.a
                 href={siteConfig.resumeUrl}
