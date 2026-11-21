@@ -121,15 +121,22 @@ function HeroAiChat() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   };
 
   useEffect(() => {
     if (messages.length > 1) {
       scrollToBottom();
+      const raf = requestAnimationFrame(scrollToBottom);
+      return () => cancelAnimationFrame(raf);
     }
   }, [messages, loading]);
 
@@ -219,7 +226,10 @@ function HeroAiChat() {
       </div>
 
       {/* Chat messages viewport */}
-      <div className="relative z-10 my-4 h-[280px] sm:h-[320px] lg:h-[340px] xl:h-[370px] overflow-y-auto pr-1 space-y-3.5 scrollbar-thin">
+      <div 
+        ref={messagesContainerRef}
+        className="relative z-10 my-4 h-[280px] sm:h-[320px] lg:h-[340px] xl:h-[370px] overflow-y-auto pr-1 space-y-3.5 scrollbar-thin"
+      >
         {messages.map((msg, i) => (
           <motion.div
             key={i}
@@ -262,7 +272,6 @@ function HeroAiChat() {
             </div>
           </motion.div>
         )}
-        <div ref={messagesEndRef} />
       </div>
 
       {/* Suggested prompt chips */}

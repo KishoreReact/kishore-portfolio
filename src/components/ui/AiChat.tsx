@@ -27,10 +27,15 @@ export default function AiChat() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const bottomRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (open) bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (open && messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   }, [messages, open]);
 
   const send = async (text?: string) => {
@@ -115,7 +120,7 @@ export default function AiChat() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
+            <div ref={messagesContainerRef} className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
               {messages.map((m, i) => (
                 <div
                   key={i}
@@ -147,7 +152,6 @@ export default function AiChat() {
                   </div>
                 </div>
               )}
-              <div ref={bottomRef} />
             </div>
 
             {/* Suggestions (show only on first message) */}
