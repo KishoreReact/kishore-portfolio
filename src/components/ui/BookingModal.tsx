@@ -476,23 +476,38 @@ Please review and send the Google Meet invitation link to ${email}!`,
                         type="button"
                         disabled={isPast || !isCurrentMonth}
                         onClick={() => setSelectedDate(date)}
-                        className={`relative aspect-square rounded-xl text-xs font-mono font-medium transition-all flex flex-col items-center justify-center ${
+                        className={`relative aspect-square rounded-xl text-xs font-mono transition-all flex flex-col items-center justify-center ${
                           !isCurrentMonth
                             ? "opacity-15 cursor-not-allowed"
                             : isPast
                             ? "opacity-25 cursor-not-allowed text-ghost-white/30"
                             : isSelected
-                            ? "bg-gradient-to-tr from-cyber-blue to-neon-violet text-obsidian font-bold shadow-lg shadow-cyber-blue/30 scale-105 z-10"
-                            : "hover:glass hover:border-cyber-blue/40 hover:text-cyber-blue text-ghost-white/80 bg-white/[0.02]"
+                            ? "bg-gradient-to-br from-cyan-300 via-cyber-blue to-sky-400 text-obsidian font-black shadow-[0_0_25px_rgba(0,240,255,0.75)] ring-2 ring-white ring-offset-2 ring-offset-obsidian scale-110 z-20"
+                            : "hover:glass hover:border-cyber-blue/50 hover:text-cyber-blue text-ghost-white/85 bg-white/[0.03]"
                         } ${
                           isToday && !isSelected
-                            ? "border border-cyber-blue/40 text-cyber-blue font-bold"
+                            ? "border-2 border-neon-violet/70 text-neon-violet font-bold bg-neon-violet/10"
                             : ""
                         }`}
                       >
-                        <span>{date.getDate()}</span>
+                        <span className={isSelected ? "text-sm font-black leading-none" : "font-medium"}>
+                          {date.getDate()}
+                        </span>
+                        
+                        {/* Selected badge icon */}
+                        {isSelected && (
+                          <span className="flex items-center justify-center mt-0.5 text-obsidian">
+                            <FiCheck size={11} className="stroke-[3.5]" />
+                          </span>
+                        )}
+
+                        {/* Today indicator label if not selected */}
+                        {isToday && !isSelected && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-neon-violet mt-0.5 animate-pulse" />
+                        )}
+
                         {/* Dot for available future weekdays */}
-                        {!isPast && isCurrentMonth && !isSelected && (
+                        {!isPast && isCurrentMonth && !isSelected && !isToday && (
                           <span className="w-1 h-1 rounded-full bg-cyber-blue/60 mt-0.5" />
                         )}
                       </button>
@@ -501,11 +516,16 @@ Please review and send the Google Meet invitation link to ${email}!`,
                 </div>
 
                 {/* Selected Date Summary */}
-                <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs text-ghost-white/50">
-                  <span>Selected Date:</span>
-                  <span className="font-semibold text-ghost-white font-mono">
-                    {selectedDate ? formatAppointmentDate(selectedDate) : "None"}
-                  </span>
+                <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs">
+                  <span className="text-ghost-white/50 font-mono">Selected Date:</span>
+                  {selectedDate ? (
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-cyber-blue/15 border border-cyber-blue text-cyber-blue font-mono font-bold shadow-sm shadow-cyber-blue/30">
+                      <FiCheck size={12} className="stroke-[3] text-cyber-blue" />
+                      {formatAppointmentDate(selectedDate)}
+                    </span>
+                  ) : (
+                    <span className="text-ghost-white/40 font-mono italic">Please pick a date</span>
+                  )}
                 </div>
               </div>
 
@@ -536,11 +556,11 @@ Please review and send the Google Meet invitation link to ${email}!`,
                             onClick={() => setSelectedTime(slot)}
                             className={`py-2 px-2 text-xs font-mono rounded-xl transition-all text-center flex items-center justify-center gap-1 border ${
                               isSelected
-                                ? "bg-cyber-blue text-obsidian font-bold border-cyber-blue shadow-md shadow-cyber-blue/30 scale-102"
+                                ? "bg-gradient-to-r from-cyan-300 via-cyber-blue to-sky-400 text-obsidian font-black border-cyan-200 shadow-[0_0_18px_rgba(0,240,255,0.6)] ring-2 ring-white/70 scale-105 z-10"
                                 : "glass border-border-glass text-ghost-white/70 hover:border-cyber-blue/30 hover:text-ghost-white"
                             }`}
                           >
-                            {isSelected && <FiCheck size={12} />}
+                            {isSelected && <FiCheck size={12} className="stroke-[3.5]" />}
                             {slot}
                           </button>
                         );
@@ -563,11 +583,11 @@ Please review and send the Google Meet invitation link to ${email}!`,
                             onClick={() => setSelectedTime(slot)}
                             className={`py-2 px-2 text-xs font-mono rounded-xl transition-all text-center flex items-center justify-center gap-1 border ${
                               isSelected
-                                ? "bg-cyber-blue text-obsidian font-bold border-cyber-blue shadow-md shadow-cyber-blue/30 scale-102"
+                                ? "bg-gradient-to-r from-cyan-300 via-cyber-blue to-sky-400 text-obsidian font-black border-cyan-200 shadow-[0_0_18px_rgba(0,240,255,0.6)] ring-2 ring-white/70 scale-105 z-10"
                                 : "glass border-border-glass text-ghost-white/70 hover:border-cyber-blue/30 hover:text-ghost-white"
                             }`}
                           >
-                            {isSelected && <FiCheck size={12} />}
+                            {isSelected && <FiCheck size={12} className="stroke-[3.5]" />}
                             {slot}
                           </button>
                         );
@@ -590,11 +610,11 @@ Please review and send the Google Meet invitation link to ${email}!`,
                             onClick={() => setSelectedTime(slot)}
                             className={`py-2 px-2 text-xs font-mono rounded-xl transition-all text-center flex items-center justify-center gap-1 border ${
                               isSelected
-                                ? "bg-cyber-blue text-obsidian font-bold border-cyber-blue shadow-md shadow-cyber-blue/30 scale-102"
+                                ? "bg-gradient-to-r from-cyan-300 via-cyber-blue to-sky-400 text-obsidian font-black border-cyan-200 shadow-[0_0_18px_rgba(0,240,255,0.6)] ring-2 ring-white/70 scale-105 z-10"
                                 : "glass border-border-glass text-ghost-white/70 hover:border-cyber-blue/30 hover:text-ghost-white"
                             }`}
                           >
-                            {isSelected && <FiCheck size={12} />}
+                            {isSelected && <FiCheck size={12} className="stroke-[3.5]" />}
                             {slot}
                           </button>
                         );
@@ -641,12 +661,17 @@ Please review and send the Google Meet invitation link to ${email}!`,
                     <FiCalendar size={18} />
                   </div>
                   <div>
-                    <div className="text-xs text-ghost-white/50 font-mono">
+                    <div className="text-[11px] text-ghost-white/50 font-mono">
                       Selected Appointment Slot
                     </div>
-                    <div className="text-sm sm:text-base font-bold text-ghost-white font-mono">
-                      {selectedDate ? formatAppointmentDate(selectedDate) : ""} • {selectedTime}{" "}
-                      <span className="text-xs text-cyber-blue font-normal">({userTimezone})</span>
+                    <div className="flex flex-wrap items-center gap-2 mt-1">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-cyber-blue/15 border border-cyber-blue text-cyber-blue font-mono font-bold text-xs sm:text-sm shadow-sm shadow-cyber-blue/20">
+                        <FiCheck size={12} className="stroke-[3]" />
+                        {selectedDate ? formatAppointmentDate(selectedDate) : ""}
+                      </span>
+                      <span className="inline-flex items-center px-2.5 py-1 rounded-lg bg-neon-violet/20 border border-neon-violet/40 text-ghost-white font-mono font-semibold text-xs">
+                        {selectedTime} ({userTimezone})
+                      </span>
                     </div>
                   </div>
                 </div>

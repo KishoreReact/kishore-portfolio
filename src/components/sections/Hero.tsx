@@ -227,7 +227,7 @@ function HeroAiChat() {
       </div>
 
       {/* Chat messages viewport */}
-      <div 
+      <div
         ref={messagesContainerRef}
         className="relative z-10 my-4 h-[280px] sm:h-[320px] lg:h-[340px] xl:h-[370px] overflow-y-auto pr-1 space-y-3.5 scrollbar-thin"
       >
@@ -241,8 +241,8 @@ function HeroAiChat() {
           >
             <div
               className={`max-w-[88%] rounded-2xl px-4 py-2.5 text-xs sm:text-sm leading-relaxed ${msg.role === "user"
-                  ? "bg-gradient-to-r from-cyber-blue to-neon-violet text-obsidian font-medium shadow-md"
-                  : "glass border border-border-glass text-ghost-white/85 bg-white/[0.02]"
+                ? "bg-gradient-to-r from-cyber-blue to-neon-violet text-obsidian font-medium shadow-md"
+                : "glass border border-border-glass text-ghost-white/85 bg-white/[0.02]"
                 }`}
             >
               {msg.content.split("\n").map((line, idx) => (
@@ -534,7 +534,7 @@ export default function Hero() {
                 whileHover={{ scale: 1.04 }}
                 whileTap={{ scale: 0.96 }}
               >
-                <FiCalendar size={14} className="text-cyber-blue" /> Book a Call
+                <FiCalendar size={14} className="text-cyber-blue" /> Book an Appointment
               </motion.button>
               <motion.button
                 onClick={scrollToProjects}
